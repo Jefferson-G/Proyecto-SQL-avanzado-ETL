@@ -137,7 +137,6 @@ media_types.Name as Tipo_Medio, playlists.Name as Lista_Reproducción,  COUNT(*)
                   GROUP BY artists.name
                   ORDER BY Canciones DESC
                   LIMIT 10;
- 
                  
 -- Consultar  el total de factura que an generado los agentes de Ventas desde una fecha inico y una fecha fin,
 -- junto con que pais de los clientes se asociaron mas,  y que grupo de artistas resulto mas vendido junto con su album y
@@ -145,7 +144,7 @@ media_types.Name as Tipo_Medio, playlists.Name as Lista_Reproducción,  COUNT(*)
 select e.FirstName||" "|| e.LastName as Agente_Ventas,
 c.Country Ciudad , at.name as Grupo, a.Title as Album, 
 g.Name as Tipo_Género,
-count(*) as TotalFacturas, min(InvoiceDate) as FechaMin,
+count(i.InvoiceId) as TotalFacturas, min(InvoiceDate) as FechaMin,
 max(InvoiceDate) as FechaMax, sum(Total) as ValorTotal
 from invoices i
         inner join customers c on c.CustomerId = i.CustomerId
@@ -156,6 +155,5 @@ from invoices i
         inner join albums a on t.AlbumId = a.AlbumId
         inner join artists at on a.ArtistId = at.ArtistId
         group by Agente_Ventas
-        having ValorTotal > 3000
-        order by Agente_Ventas DESC;
+        order by ValorTotal DESC;
 
